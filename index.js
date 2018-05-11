@@ -5,7 +5,8 @@ import {
   Text,
   View,
   Environment
-} from 'react-360';
+} from 'react-360'
+import Entity from 'Entity'
 
 export default class MERNVR extends React.Component {
   constructor() {
@@ -42,7 +43,11 @@ export default class MERNVR extends React.Component {
             color: 'white'
           }
         ]
-      }
+      },
+      vrObjects: [],
+      hide: 'none',
+      collectedNum: 0,
+      collectedList: []
     }
   }
   componentDidMount = () => {
@@ -52,14 +57,34 @@ export default class MERNVR extends React.Component {
       {uri: this.state.game.world}
     )
   }
+  setModelStyles = (vrObject, index) => {
+    return {
+            display: this.state.collectedList[index] ? 'none' : 'flex',
+            color: vrObject.color,
+            transform: [
+              {translateX: vrObject.translateX},
+              {translateY: vrObject.translateY},
+              {translateZ: vrObject.translateZ},
+              {scale: vrObject.scale},
+              {rotateY: vrObject.rotateY},
+              {rotateX: vrObject.rotateX},
+              {rotateZ: vrObject.rotateZ}
+            ]
+          }
+  }
   render() {
     return (
-      <View style={styles.panel}>
-        <View style={styles.greetingBox}>
-          <Text style={styles.greeting}>
-            Welcome to React 360
-          </Text>
-        </View>
+      <View>
+        {this.state.vrObjects.map((vrObject, i) => {
+            return (
+                      <Entity key={i} style={this.setModelStyles(vrObject, i)}
+                        source={{
+                          obj: {uri: vrObject.objUrl},
+                          mtl: {uri: vrObject.mtlUrl}
+                        }}
+                      />
+                  )
+        })}
       </View>
     );
   }
