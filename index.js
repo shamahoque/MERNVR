@@ -6,6 +6,7 @@ import {
   View,
   Environment,
   VrButton,
+  VrHeadModel,
   asset,
   NativeModules
 } from 'react-360'
@@ -51,7 +52,8 @@ export default class MERNVR extends React.Component {
       vrObjects: [],
       hide: 'none',
       collectedNum: 0,
-      collectedList: []
+      collectedList: [],
+      hmMatrix: VrHeadModel.getHeadMatrix()
     }
   }
   componentDidMount = () => {
@@ -82,6 +84,7 @@ export default class MERNVR extends React.Component {
       let updateCollectedList = this.state.collectedList;
       let updateCollectedNum = this.state.collectedNum + 1;
       updateCollectedList[match] = true;
+      this.checkGameCompleteStatus(updateCollectedNum);
       AudioModule.playOneShot({
           source: asset('collect.mp3'),
       });
@@ -91,6 +94,24 @@ export default class MERNVR extends React.Component {
         source: asset('clog-up.mp3'),
       });
     }
+  }
+  checkGameCompleteStatus = (collectedTotal) => {
+    if (collectedTotal == this.state.game.answerObjects.length) {
+      AudioModule.playEnvironmental({
+        source: asset('happy-bot.mp3'),
+        loop: true
+      })
+      this.setState({hide: 'flex', hmMatrix: VrHeadModel.getHeadMatrix()});
+    }
+  }
+  setGameCompletedStyle = () => {
+    return {
+            position: 'absolute',
+            display: this.state.hide,
+            layoutOrigin: [0.5, 0.5],
+            width: 6,
+            transform: [{translate: [0, 0, 0]}, {matrix: this.state.hmMatrix}]
+          }
   }
   render() {
     return (
@@ -106,6 +127,17 @@ export default class MERNVR extends React.Component {
                     </VrButton>
                   )
         })}
+        <View style={this.setGameCompletedStyle()}>
+          <View style={styles.completeMessage}>
+            <Text style={styles.congratsText}>Congratulations!</Text>
+            <Text style={styles.collectedText}>You have collected all items in {this.state.game.name}</Text>
+          </View>
+          <VrButton onClick={this.exitGame}>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>Play another game</Text>
+            </View>
+          </VrButton>
+        </View>
       </View>
     );
   }
