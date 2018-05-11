@@ -66,23 +66,31 @@ export default class MERNVR extends React.Component {
 };
 
 const styles = StyleSheet.create({
-  panel: {
-    // Fill the entire surface
-    width: 1000,
-    height: 600,
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  greetingBox: {
-    padding: 20,
-    backgroundColor: '#000000',
-    borderColor: '#639dda',
-    borderWidth: 2,
-  },
-  greeting: {
-    fontSize: 30,
-  },
-});
+    completeMessage: {
+      margin: 0.1,
+      height: 1.5,
+      backgroundColor: 'green',
+      transform: [ {translate: [0, 0, -5] } ]
+    },
+    congratsText: {
+      fontSize: 0.5,
+      textAlign: 'center',
+      marginTop: 0.2
+    },
+    collectedText: {
+      fontSize: 0.2,
+      textAlign: 'center'
+    },
+    button: {
+      margin: 0.1,
+      height: 0.5,
+      backgroundColor: 'blue',
+      transform: [ { translate: [0, 0, -5] } ]
+    },
+    buttonText: {
+      fontSize: 0.3,
+      textAlign: 'center'
+    }
+})
 
 AppRegistry.registerComponent('MERNVR', () => MERNVR);
