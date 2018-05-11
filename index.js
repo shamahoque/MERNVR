@@ -12,6 +12,7 @@ import {
 } from 'react-360'
 import Entity from 'Entity'
 const {AudioModule} = NativeModules
+const Location = NativeModules.Location
 
 export default class MERNVR extends React.Component {
   constructor() {
@@ -112,6 +113,9 @@ export default class MERNVR extends React.Component {
             width: 6,
             transform: [{translate: [0, 0, 0]}, {matrix: this.state.hmMatrix}]
           }
+  }
+  exitGame = () => {
+    Location.replace('/');
   }
   render() {
     return (
