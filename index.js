@@ -4,9 +4,13 @@ import {
   StyleSheet,
   Text,
   View,
-  Environment
+  Environment,
+  VrButton,
+  asset,
+  NativeModules
 } from 'react-360'
 import Entity from 'Entity'
+const {AudioModule} = NativeModules
 
 export default class MERNVR extends React.Component {
   constructor() {
@@ -72,17 +76,34 @@ export default class MERNVR extends React.Component {
             ]
           }
   }
+  collectItem = vrObject => event => {
+    let match = this.state.game.answerObjects.indexOf(vrObject);
+    if (match != -1) {
+      let updateCollectedList = this.state.collectedList;
+      let updateCollectedNum = this.state.collectedNum + 1;
+      updateCollectedList[match] = true;
+      AudioModule.playOneShot({
+          source: asset('collect.mp3'),
+      });
+      this.setState({collectedList: updateCollectedList, collectedNum: updateCollectedNum});
+    } else {
+      AudioModule.playOneShot({
+        source: asset('clog-up.mp3'),
+      });
+    }
+  }
   render() {
     return (
       <View>
         {this.state.vrObjects.map((vrObject, i) => {
-            return (
-                      <Entity key={i} style={this.setModelStyles(vrObject, i)}
+            return (<VrButton onClick={this.collectItem(vrObject)} key={i}>
+                      <Entity style={this.setModelStyles(vrObject, i)}
                         source={{
                           obj: {uri: vrObject.objUrl},
                           mtl: {uri: vrObject.mtlUrl}
                         }}
                       />
+                    </VrButton>
                   )
         })}
       </View>
