@@ -56,6 +56,7 @@ export default class MERNVR extends React.Component {
       collectedList: [],
       hmMatrix: VrHeadModel.getHeadMatrix()
     }
+    this.lastUpdate = Date.now()
   }
   componentDidMount = () => {
     let vrObjects = this.state.game.answerObjects.concat(this.state.game.wrongObjects)
@@ -117,6 +118,21 @@ export default class MERNVR extends React.Component {
   exitGame = () => {
     Location.replace('/');
   }
+  rotate = index => event => {
+    const now = Date.now();
+    const diff = now - this.lastUpdate;
+    const vrObjects = this.state.vrObjects;
+    vrObjects[index].rotateY = vrObjects[index].rotateY + diff / 200
+    this.lastUpdate = now;
+    this.setState({vrObjects: vrObjects});
+    this.requestID = requestAnimationFrame(this.rotate(index));
+  }
+  stopRotate = () => {
+    if (this.requestID) {
+      cancelAnimationFrame(this.requestID);
+      this.requestID = null;
+    }
+  }
   render() {
     return (
       <View>
@@ -127,6 +143,8 @@ export default class MERNVR extends React.Component {
                           obj: {uri: vrObject.objUrl},
                           mtl: {uri: vrObject.mtlUrl}
                         }}
+                        onEnter={this.rotate(i)}
+                        onExit={this.stopRotate}
                       />
                     </VrButton>
                   )
