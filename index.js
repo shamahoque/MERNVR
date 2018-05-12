@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -11,8 +11,8 @@ import {
   NativeModules
 } from 'react-360'
 import Entity from 'Entity'
-const {AudioModule} = NativeModules
-const Location = NativeModules.Location
+const {AudioModule, Location} = NativeModules
+//const Location = NativeModules.Location
 
 export default class MERNVR extends React.Component {
   constructor() {
@@ -81,20 +81,20 @@ export default class MERNVR extends React.Component {
           }
   }
   collectItem = vrObject => event => {
-    let match = this.state.game.answerObjects.indexOf(vrObject);
+    let match = this.state.game.answerObjects.indexOf(vrObject)
     if (match != -1) {
-      let updateCollectedList = this.state.collectedList;
-      let updateCollectedNum = this.state.collectedNum + 1;
-      updateCollectedList[match] = true;
-      this.checkGameCompleteStatus(updateCollectedNum);
+      let updateCollectedList = this.state.collectedList
+      let updateCollectedNum = this.state.collectedNum + 1
+      updateCollectedList[match] = true
+      this.checkGameCompleteStatus(updateCollectedNum)
       AudioModule.playOneShot({
           source: asset('collect.mp3'),
-      });
-      this.setState({collectedList: updateCollectedList, collectedNum: updateCollectedNum});
+      })
+      this.setState({collectedList: updateCollectedList, collectedNum: updateCollectedNum})
     } else {
       AudioModule.playOneShot({
         source: asset('clog-up.mp3'),
-      });
+      })
     }
   }
   checkGameCompleteStatus = (collectedTotal) => {
@@ -103,7 +103,7 @@ export default class MERNVR extends React.Component {
         source: asset('happy-bot.mp3'),
         loop: true
       })
-      this.setState({hide: 'flex', hmMatrix: VrHeadModel.getHeadMatrix()});
+      this.setState({hide: 'flex', hmMatrix: VrHeadModel.getHeadMatrix()})
     }
   }
   setGameCompletedStyle = () => {
@@ -116,21 +116,21 @@ export default class MERNVR extends React.Component {
           }
   }
   exitGame = () => {
-    Location.replace('/');
+    Location.replace('/')
   }
   rotate = index => event => {
-    const now = Date.now();
-    const diff = now - this.lastUpdate;
-    const vrObjects = this.state.vrObjects;
+    const now = Date.now()
+    const diff = now - this.lastUpdate
+    const vrObjects = this.state.vrObjects
     vrObjects[index].rotateY = vrObjects[index].rotateY + diff / 200
-    this.lastUpdate = now;
-    this.setState({vrObjects: vrObjects});
-    this.requestID = requestAnimationFrame(this.rotate(index));
+    this.lastUpdate = now
+    this.setState({vrObjects: vrObjects})
+    this.requestID = requestAnimationFrame(this.rotate(index))
   }
   stopRotate = () => {
     if (this.requestID) {
-      cancelAnimationFrame(this.requestID);
-      this.requestID = null;
+      cancelAnimationFrame(this.requestID)
+      this.requestID = null
     }
   }
   render() {
@@ -161,9 +161,9 @@ export default class MERNVR extends React.Component {
           </VrButton>
         </View>
       </View>
-    );
+    )
   }
-};
+}
 
 const styles = StyleSheet.create({
     completeMessage: {
@@ -193,4 +193,4 @@ const styles = StyleSheet.create({
     }
 })
 
-AppRegistry.registerComponent('MERNVR', () => MERNVR);
+AppRegistry.registerComponent('MERNVR', () => MERNVR)
