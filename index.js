@@ -11,7 +11,10 @@ import {
   NativeModules
 } from 'react-360'
 import Entity from 'Entity'
+import {read} from './api-game.js'
+
 const {AudioModule, Location} = NativeModules
+
 
 export default class MERNVR extends React.Component {
   constructor() {
@@ -58,11 +61,22 @@ export default class MERNVR extends React.Component {
     this.lastUpdate = Date.now()
   }
   componentDidMount = () => {
-    let vrObjects = this.state.game.answerObjects.concat(this.state.game.wrongObjects)
-    this.setState({vrObjects: vrObjects})
-    Environment.setBackgroundImage(
-      {uri: this.state.game.world}
-    )
+    let gameId = Location.search.split('?id=')[1]
+    read({
+          gameId: gameId
+      }).then((data) => {
+        if (data.error) {
+          this.setState({error: data.error})
+        } else {
+          this.setState({
+            vrObjects: data.answerObjects.concat(data.wrongObjects),
+            game: data
+          })
+          Environment.setBackgroundImage(
+            {uri: data.world}
+          )
+        }
+      })
   }
   setModelStyles = (vrObject, index) => {
     return {
