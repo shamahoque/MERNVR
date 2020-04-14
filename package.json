@@ -1,6 +1,6 @@
 {
   "name": "MERNVR",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-360/scripts/packager.js",
