@@ -1,5 +1,6 @@
 # MERNVR (React 360)
-
+* [Get the updated second edition code here](https://github.com/shamahoque/MERNVR/tree/static-game-second-edition) 
+---
 A web-based VR game developed using React 360. 
 
 ![MERN VR Game](https://s3.amazonaws.com/mernbook/git+/mernvr360.gif "MERN VR Game")
